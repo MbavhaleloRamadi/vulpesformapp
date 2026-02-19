@@ -1,0 +1,181 @@
+@page
+@model VulpesFormsApp.Pages.WeeklyQuestionnairePageModel
+@{ ViewData["Title"] = "Weekly Questionnaire"; }
+
+<div class="row justify-content-center">
+<div class="col-md-8">
+    <h2 class="mb-4" style="color: #1a3c5e;">Weekly Questionnaire</h2>
+
+    <form method="post" id="weeklyForm">
+        <!-- Name -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Name <span class="text-danger">*</span></label>
+            <div class="row g-2">
+                <div class="col"><input asp-for="Form.FirstName" class="form-control" placeholder="First Name" /></div>
+                <div class="col"><input asp-for="Form.LastName" class="form-control" placeholder="Last Name" /></div>
+            </div>
+        </div>
+
+        <!-- Date -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Today's Date</label>
+            <div class="row g-2">
+                <div class="col-auto"><input asp-for="Form.DateMonth" class="form-control" placeholder="MM" maxlength="2" style="width:70px" /></div>
+                <div class="col-auto"><input asp-for="Form.DateDay" class="form-control" placeholder="DD" maxlength="2" style="width:70px" /></div>
+                <div class="col-auto"><input asp-for="Form.DateYear" class="form-control" placeholder="YYYY" maxlength="4" style="width:90px" /></div>
+            </div>
+        </div>
+
+        <!-- Reports -->
+        <h5 class="mt-4">How many Reports have you completed this week?</h5>
+        <div class="mb-3">
+            <label asp-for="Form.ReportsCompleted" class="form-label fw-bold">Reports Completed</label>
+            <input asp-for="Form.ReportsCompleted" type="number" class="form-control" style="width:120px" min="0" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label fw-bold">Ref Codes for Reports</label>
+            <table class="table table-bordered table-sm" id="reportsRefTable">
+                <thead class="table-light"><tr><th>Vulpes Ref Codes</th><th></th></tr></thead>
+                <tbody></tbody>
+            </table>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addRefRow('reportsRefTable')">+ Add Row</button>
+            <input type="hidden" asp-for="Form.ReportsRefCodesJson" id="reportsRefJson" />
+        </div>
+
+        <!-- Skeletons -->
+        <h5 class="mt-4">How many Skeletons have you completed this week?</h5>
+        <div class="mb-3">
+            <label asp-for="Form.SkeletonsCompleted" class="form-label fw-bold">Skeletons Completed</label>
+            <input asp-for="Form.SkeletonsCompleted" type="number" class="form-control" style="width:120px" min="0" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label fw-bold">Ref Codes for Skeletons</label>
+            <table class="table table-bordered table-sm" id="skeletonsRefTable">
+                <thead class="table-light"><tr><th>Vulpes Ref Codes</th><th></th></tr></thead>
+                <tbody></tbody>
+            </table>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addRefRow('skeletonsRefTable')">+ Add Row</button>
+            <input type="hidden" asp-for="Form.SkeletonsRefCodesJson" id="skeletonsRefJson" />
+        </div>
+
+        <!-- Add-ons -->
+        <h5 class="mt-4">How many Additional Services did you complete this week?</h5>
+        <div class="mb-3">
+            <label asp-for="Form.AddonsCompleted" class="form-label fw-bold">Add-ons Completed</label>
+            <input asp-for="Form.AddonsCompleted" type="number" class="form-control" style="width:120px" min="0" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label fw-bold">Ref Codes for Add-ons</label>
+            <table class="table table-bordered table-sm" id="addonsRefTable">
+                <thead class="table-light"><tr><th>Vulpes Ref Codes</th><th></th></tr></thead>
+                <tbody></tbody>
+            </table>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addRefRow('addonsRefTable')">+ Add Row</button>
+            <input type="hidden" asp-for="Form.AddonsRefCodesJson" id="addonsRefJson" />
+        </div>
+
+        <!-- Ratings -->
+        @{ var ratingOptions = new[] { "Poor", "Below Average", "Average", "Good", "Excellent" }; }
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">How would you rate the overall quality of your reports this week?</label>
+            <select asp-for="Form.QualityRating" class="form-select">
+                <option value="">Please Select</option>
+                @foreach (var o in ratingOptions) { <option>@o</option> }
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label fw-bold">How would you rate your adherence to service submission deadlines this week?</label>
+            <select asp-for="Form.DeadlineRating" class="form-select">
+                <option value="">Please Select</option>
+                @foreach (var o in ratingOptions) { <option>@o</option> }
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label fw-bold">How would you rate your responsiveness to communications this week?</label>
+            <select asp-for="Form.ResponsivenessRating" class="form-select">
+                <option value="">Please Select</option>
+                @foreach (var o in ratingOptions) { <option>@o</option> }
+            </select>
+        </div>
+
+        <!-- Feedback -->
+        <div class="mb-3">
+            <label asp-for="Form.KeyAchievement" class="form-label fw-bold">What was your key achievement this week? <span class="text-danger">*</span></label>
+            <textarea asp-for="Form.KeyAchievement" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="Form.KeyAchievement" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Form.Challenges" class="form-label fw-bold">What challenges did you face and how did you address them? <span class="text-danger">*</span></label>
+            <textarea asp-for="Form.Challenges" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="Form.Challenges" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Form.ImprovementArea" class="form-label fw-bold">What is one area you'd like to improve for next week? <span class="text-danger">*</span></label>
+            <textarea asp-for="Form.ImprovementArea" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="Form.ImprovementArea" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Form.Suggestions" class="form-label fw-bold">Do you have any suggestions for company/operational improvements? <span class="text-danger">*</span></label>
+            <textarea asp-for="Form.Suggestions" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="Form.Suggestions" class="text-danger"></span>
+        </div>
+
+        <!-- Signature -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Signature</label>
+            <canvas id="signatureCanvas" class="border rounded" width="400" height="150" style="cursor:crosshair; display:block;"></canvas>
+            <button type="button" class="btn btn-sm btn-outline-secondary mt-1" onclick="clearSignature()">Clear</button>
+            <input type="hidden" asp-for="Form.SignatureBase64" id="signatureData" />
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg" onclick="collectWeeklyData()">Submit</button>
+    </form>
+</div>
+</div>
+
+@section Scripts {
+<script>
+    function addRefRow(tableId) {
+        const tbody = document.querySelector(`#${tableId} tbody`);
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><input type="text" class="form-control form-control-sm ref-code" placeholder="e.g. ADK-1002" /></td>
+            <td><button type="button" class="btn btn-sm btn-outline-danger" onclick="this.closest('tr').remove()">✕</button></td>
+        `;
+        tbody.appendChild(tr);
+    }
+
+    function collectRefCodes(tableId) {
+        return Array.from(document.querySelectorAll(`#${tableId} tbody .ref-code`))
+            .map(input => ({ 'Vulpes Ref Codes': input.value }))
+            .filter(r => r['Vulpes Ref Codes']);
+    }
+
+    function collectWeeklyData() {
+        document.getElementById('reportsRefJson').value = JSON.stringify(collectRefCodes('reportsRefTable'));
+        document.getElementById('skeletonsRefJson').value = JSON.stringify(collectRefCodes('skeletonsRefTable'));
+        document.getElementById('addonsRefJson').value = JSON.stringify(collectRefCodes('addonsRefTable'));
+        // Signature
+        const canvas = document.getElementById('signatureCanvas');
+        document.getElementById('signatureData').value = canvas.toDataURL('image/png');
+    }
+
+    // --- Signature pad ---
+    const canvas = document.getElementById('signatureCanvas');
+    const ctx = canvas.getContext('2d');
+    let drawing = false;
+    ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.strokeStyle = '#000';
+
+    canvas.addEventListener('mousedown', e => { drawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); });
+    canvas.addEventListener('mousemove', e => { if (drawing) { ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); } });
+    canvas.addEventListener('mouseup', () => drawing = false);
+    canvas.addEventListener('mouseleave', () => drawing = false);
+    // Touch support
+    canvas.addEventListener('touchstart', e => { e.preventDefault(); drawing = true; const t = e.touches[0]; const r = canvas.getBoundingClientRect(); ctx.beginPath(); ctx.moveTo(t.clientX - r.left, t.clientY - r.top); });
+    canvas.addEventListener('touchmove', e => { e.preventDefault(); if (drawing) { const t = e.touches[0]; const r = canvas.getBoundingClientRect(); ctx.lineTo(t.clientX - r.left, t.clientY - r.top); ctx.stroke(); } });
+    canvas.addEventListener('touchend', () => drawing = false);
+
+    function clearSignature() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
+</script>
+}

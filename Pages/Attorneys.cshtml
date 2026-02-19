@@ -1,0 +1,96 @@
+@page
+@model VulpesFormsApp.Pages.AttorneysPageModel
+@{ ViewData["Title"] = "Attorneys"; }
+
+<div class="row justify-content-center">
+<div class="col-md-8">
+    <h2 class="mb-4" style="color: #1a3c5e;">Attorneys</h2>
+    <div class="alert alert-info">
+        We strongly advise that you first check if the attorney firm does not already exist.
+        You can do this by searching the Attorney Board on monday.com
+    </div>
+
+    <form method="post" id="attorneysForm">
+        <div class="mb-3">
+            <label asp-for="Form.YourName" class="form-label fw-bold">Your Name</label>
+            <input asp-for="Form.YourName" class="form-control" />
+            <span asp-validation-for="Form.YourName" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Form.FirmName" class="form-label fw-bold">Firm Name</label>
+            <input asp-for="Form.FirmName" class="form-control" />
+            <span asp-validation-for="Form.FirmName" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Form.AttorneyCode" class="form-label fw-bold">Attorney Code</label>
+            <input asp-for="Form.AttorneyCode" class="form-control" />
+            <span asp-validation-for="Form.AttorneyCode" class="text-danger"></span>
+        </div>
+
+        <!-- Firm Contacts Dynamic Table -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Firm Contacts</label>
+            <table class="table table-bordered table-sm" id="contactsTable">
+                <thead class="table-light">
+                    <tr><th>Role</th><th>Name and Surname</th><th>Email</th><th>Phone Number</th><th></th></tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addContactRow()">+ Add Contact</button>
+            <input type="hidden" asp-for="Form.FirmContactsJson" id="contactsJson" />
+        </div>
+
+        <!-- Service Level Agreement -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Service Level Agreement</label>
+            <div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="Form.ServiceLevelAgreement" value="Cash" id="slaCash" />
+                    <label class="form-check-label" for="slaCash">Cash</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="Form.ServiceLevelAgreement" value="Deposit" id="slaDeposit" />
+                    <label class="form-check-label" for="slaDeposit">Deposit</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="Form.ServiceLevelAgreement" value="Contingency" id="slaContingency" />
+                    <label class="form-check-label" for="slaContingency">Contingency</label>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg" onclick="collectContacts()">Submit</button>
+    </form>
+</div>
+</div>
+
+@section Scripts {
+<script>
+    function addContactRow() {
+        const tbody = document.querySelector('#contactsTable tbody');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><input type="text" class="form-control form-control-sm ct-role" /></td>
+            <td><input type="text" class="form-control form-control-sm ct-name" /></td>
+            <td><input type="email" class="form-control form-control-sm ct-email" /></td>
+            <td><input type="tel" class="form-control form-control-sm ct-phone" /></td>
+            <td><button type="button" class="btn btn-sm btn-outline-danger" onclick="this.closest('tr').remove()">✕</button></td>
+        `;
+        tbody.appendChild(tr);
+    }
+
+    function collectContacts() {
+        const rows = document.querySelectorAll('#contactsTable tbody tr');
+        const data = Array.from(rows).map(tr => ({
+            'Role': tr.querySelector('.ct-role').value,
+            'Name and Surname': tr.querySelector('.ct-name').value,
+            'Email': tr.querySelector('.ct-email').value,
+            'Phone Number': tr.querySelector('.ct-phone').value
+        })).filter(r => r['Name and Surname']);
+        document.getElementById('contactsJson').value = JSON.stringify(data);
+    }
+
+    // Add one row by default
+    addContactRow();
+</script>
+}

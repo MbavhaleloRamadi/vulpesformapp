@@ -1,0 +1,21 @@
+@page
+@model VulpesFormsApp.Pages.ConfirmationModel
+@{ ViewData["Title"] = "Submission Complete"; }
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 text-center">
+        @if (Model.Success)
+        {
+            <div class="mb-4" style="font-size: 4rem; color: #2e8b57;">&#10004;</div>
+            <h2>Thank You!</h2>
+            <p class="text-muted">Your <strong>@Model.FormName</strong> has been submitted successfully.</p>
+        }
+        else
+        {
+            <div class="mb-4" style="font-size: 4rem; color: #dc3545;">&#10006;</div>
+            <h2>Submission Error</h2>
+            <p class="text-muted">There was a problem submitting your <strong>@Model.FormName</strong>. Please try again or contact support.</p>
+        }
+        <a href="/" class="btn btn-primary mt-3">Back to Forms</a>
+    </div>
+</div>

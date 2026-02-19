@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("VulpesFormsApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+270ae53d55b582a879bee96b7c372b116605da22")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ac6d0d30bb7878f080906d19c5a652abd365c3dc")]
 [assembly: System.Reflection.AssemblyProductAttribute("VulpesFormsApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("VulpesFormsApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

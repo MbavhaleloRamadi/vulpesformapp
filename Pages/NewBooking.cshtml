@@ -1,0 +1,232 @@
+@page
+@model VulpesFormsApp.Pages.NewBookingModel
+@{ ViewData["Title"] = "New Booking Form"; }
+
+<div class="row justify-content-center">
+<div class="col-md-8">
+    <h2 class="mb-4" style="color: #1a3c5e;">New Booking Form</h2>
+
+    <form method="post" id="bookingForm">
+        <!-- Plaintiff Type -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Is this a new or existing plaintiff? <span class="text-danger">*</span></label>
+            <div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" asp-for="Form.PlaintiffType" value="New Plaintiff" id="ptNew" onchange="togglePlaintiffFields()" />
+                    <label class="form-check-label" for="ptNew">New Plaintiff</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" asp-for="Form.PlaintiffType" value="Existing Plaintiff" id="ptExisting" onchange="togglePlaintiffFields()" />
+                    <label class="form-check-label" for="ptExisting">Existing Plaintiff</label>
+                </div>
+            </div>
+            <span asp-validation-for="Form.PlaintiffType" class="text-danger"></span>
+        </div>
+
+        <!-- Plaintiff Name -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Plaintiff Name <span class="text-danger">*</span></label>
+            <div class="row g-2">
+                <div class="col-2">
+                    <select asp-for="Form.NamePrefix" class="form-select form-select-sm">
+                        <option value="">Prefix</option>
+                        <option>Mr</option><option>Mrs</option><option>Ms</option><option>Dr</option><option>Adv</option>
+                    </select>
+                </div>
+                <div class="col"><input asp-for="Form.FirstName" class="form-control" placeholder="First Name" /></div>
+                <div class="col"><input asp-for="Form.MiddleName" class="form-control" placeholder="Middle Name" /></div>
+                <div class="col"><input asp-for="Form.LastName" class="form-control" placeholder="Last Name" /></div>
+                <div class="col-2"><input asp-for="Form.NameSuffix" class="form-control" placeholder="Suffix" /></div>
+            </div>
+        </div>
+
+        <!-- New Plaintiff fields -->
+        <div id="newPlaintiffFields">
+            <div class="mb-3">
+                <label asp-for="Form.PlaintiffIdNumber" class="form-label fw-bold">Plaintiff ID Number</label>
+                <input asp-for="Form.PlaintiffIdNumber" class="form-control" maxlength="13" />
+            </div>
+        </div>
+
+        <!-- Existing Plaintiff fields -->
+        <div id="existingPlaintiffFields" style="display:none;">
+            <div class="mb-3">
+                <label class="form-label fw-bold">Do You Know Plaintiff Reference Number?</label>
+                <select asp-for="Form.KnowsReference" class="form-select" onchange="toggleRefFields()">
+                    <option value="">Please Select</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+            <div id="refYesFields" style="display:none;">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Enter Plaintiff Vulpes Reference Number</label>
+                    <input asp-for="Form.VulpesReferenceNumber" class="form-control" />
+                    <small class="text-danger">IMPORTANT! Make sure you verify the Ref Number or Plaintiff won't be updated.</small>
+                </div>
+            </div>
+            <div id="refNoFields" style="display:none;">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Enter Plaintiff ID Number</label>
+                    <input asp-for="Form.PlaintiffIdForExisting" class="form-control" maxlength="13" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Assessment Date -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Assessment Date</label>
+            <div class="row g-2">
+                <div class="col-auto"><input asp-for="Form.AssessmentDateMonth" class="form-control" placeholder="MM" maxlength="2" style="width:70px" /></div>
+                <div class="col-auto"><input asp-for="Form.AssessmentDateDay" class="form-control" placeholder="DD" maxlength="2" style="width:70px" /></div>
+                <div class="col-auto"><input asp-for="Form.AssessmentDateYear" class="form-control" placeholder="YYYY" maxlength="4" style="width:90px" /></div>
+            </div>
+        </div>
+
+        <!-- Location -->
+        <div class="mb-3">
+            <label asp-for="Form.Location" class="form-label fw-bold">Location - Assessment</label>
+            <select asp-for="Form.Location" class="form-select">
+                <option value="">Please Select</option>
+                <option>Nelspruit</option><option>Pretoria</option><option>Ballito</option>
+                <option>Durban</option><option>Cape Town</option><option>Online</option>
+            </select>
+        </div>
+
+        <!-- Attorney Firm (searchable) -->
+        <div class="mb-3">
+            <label asp-for="Form.AttorneyFirm" class="form-label fw-bold">Attorney Firm</label>
+            <input asp-for="Form.AttorneyFirm" class="form-control" id="attorneyFirmInput" list="attorneyFirmList" autocomplete="off" placeholder="Start typing to search..." />
+            <datalist id="attorneyFirmList"></datalist>
+        </div>
+
+        <!-- Attorney Reference -->
+        <div class="mb-3">
+            <label asp-for="Form.AttorneyReference" class="form-label fw-bold">Attorney Reference</label>
+            <input asp-for="Form.AttorneyReference" class="form-control" />
+        </div>
+
+        <!-- Instructing Attorney -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Instructing Attorney</label>
+            <div class="row g-2">
+                <div class="col-2">
+                    <select asp-for="Form.InstructingAttorneyPrefix" class="form-select form-select-sm">
+                        <option value="">Prefix</option>
+                        <option>Mr</option><option>Mrs</option><option>Ms</option><option>Dr</option><option>Adv</option>
+                    </select>
+                </div>
+                <div class="col"><input asp-for="Form.InstructingAttorneyFirst" class="form-control" placeholder="First Name" /></div>
+                <div class="col"><input asp-for="Form.InstructingAttorneyLast" class="form-control" placeholder="Last Name" /></div>
+            </div>
+        </div>
+
+        <!-- Instructing Date -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Instructing Date</label>
+            <div class="row g-2">
+                <div class="col-auto"><input asp-for="Form.InstructingDateMonth" class="form-control" placeholder="MM" maxlength="2" style="width:70px" /></div>
+                <div class="col-auto"><input asp-for="Form.InstructingDateDay" class="form-control" placeholder="DD" maxlength="2" style="width:70px" /></div>
+                <div class="col-auto"><input asp-for="Form.InstructingDateYear" class="form-control" placeholder="YYYY" maxlength="4" style="width:90px" /></div>
+            </div>
+        </div>
+
+        <!-- Services Dynamic Table -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Services</label>
+            <table class="table table-bordered" id="servicesTable">
+                <thead class="table-light">
+                    <tr>
+                        <th>Services</th><th>Active?</th><th>Assessment Date</th>
+                        <th>Assessment Time</th><th>Notify Someone</th><th></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addServiceRow()">+ Add Service</button>
+            <input type="hidden" asp-for="Form.ServicesJson" id="servicesJson" />
+        </div>
+
+        <!-- Notes -->
+        <div class="mb-3">
+            <label asp-for="Form.Notes" class="form-label fw-bold">Notes</label>
+            <textarea asp-for="Form.Notes" class="form-control" rows="4"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg" onclick="collectServices()">Submit</button>
+    </form>
+</div>
+</div>
+
+@section Scripts {
+<script>
+    const serviceOptions = ['IP','OT','EP','CLP','NP','AC','Reassessment','Amendment','Addendum','Joint Minutes','Pre-trial','Trial'];
+
+    function togglePlaintiffFields() {
+        const isNew = document.getElementById('ptNew').checked;
+        document.getElementById('newPlaintiffFields').style.display = isNew ? '' : 'none';
+        document.getElementById('existingPlaintiffFields').style.display = isNew ? 'none' : '';
+    }
+
+    function toggleRefFields() {
+        const val = document.querySelector('[name="Form.KnowsReference"]').value;
+        document.getElementById('refYesFields').style.display = val === 'Yes' ? '' : 'none';
+        document.getElementById('refNoFields').style.display = val === 'No' ? '' : 'none';
+    }
+
+    function addServiceRow() {
+        const tbody = document.querySelector('#servicesTable tbody');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><select class="form-select form-select-sm svc-service">
+                <option value="">Choose Service</option>
+                ${serviceOptions.map(s => `<option>${s}</option>`).join('')}
+            </select></td>
+            <td><select class="form-select form-select-sm svc-active">
+                <option value="">Select</option><option>Yes</option><option>No</option>
+            </select></td>
+            <td><input type="date" class="form-control form-control-sm svc-date" /></td>
+            <td><input type="time" class="form-control form-control-sm svc-time" /></td>
+            <td><input type="email" class="form-control form-control-sm svc-notify" placeholder="email" /></td>
+            <td><button type="button" class="btn btn-sm btn-outline-danger" onclick="this.closest('tr').remove()">✕</button></td>
+        `;
+        tbody.appendChild(tr);
+    }
+
+    function collectServices() {
+        const rows = document.querySelectorAll('#servicesTable tbody tr');
+        const data = Array.from(rows).map(tr => {
+            const time24 = tr.querySelector('.svc-time').value;
+            let time12 = '';
+            if (time24) {
+                const [h, m] = time24.split(':').map(Number);
+                const ampm = h >= 12 ? 'PM' : 'AM';
+                time12 = `${((h % 12) || 12).toString().padStart(2,'0')}:${m.toString().padStart(2,'0')} ${ampm}`;
+            }
+            return {
+                'Services': tr.querySelector('.svc-service').value,
+                'Active?': tr.querySelector('.svc-active').value,
+                'Assessment Date': tr.querySelector('.svc-date').value,
+                'Assessment Time': time12,
+                'Notify Someone': tr.querySelector('.svc-notify').value
+            };
+        }).filter(r => r['Services']);
+        document.getElementById('servicesJson').value = JSON.stringify(data);
+    }
+
+    // Load attorney firms for searchable dropdown
+    fetch('/data/attorneys.json')
+        .then(r => r.json())
+        .then(firms => {
+            const list = document.getElementById('attorneyFirmList');
+            firms.forEach(f => {
+                const opt = document.createElement('option');
+                opt.value = f;
+                list.appendChild(opt);
+            });
+        });
+
+    // Add one service row by default
+    addServiceRow();
+</script>
+}

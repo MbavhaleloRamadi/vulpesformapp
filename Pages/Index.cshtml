@@ -1,10 +1,33 @@
 ﻿@page
-@model IndexModel
-@{
-    ViewData["Title"] = "Home page";
-}
+@model VulpesFormsApp.Pages.IndexModel
+@{ ViewData["Title"] = "Vulpes Forms"; }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8">
+        <h2 class="mb-4" style="color: #1a3c5e;">Vulpes Forms</h2>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">New Booking Form</h5>
+                <p class="card-text text-muted">Create a new or update an existing plaintiff booking.</p>
+                <a href="/NewBooking" class="btn btn-primary">Open Form</a>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Weekly Questionnaire</h5>
+                <p class="card-text text-muted">Submit your weekly performance report.</p>
+                <a href="/WeeklyQuestionnaire" class="btn btn-primary">Open Form</a>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Attorneys</h5>
+                <p class="card-text text-muted">Register a new attorney firm.</p>
+                <a href="/Attorneys" class="btn btn-primary">Open Form</a>
+            </div>
+        </div>
+    </div>
 </div>
